@@ -14,5 +14,6 @@ LANGUAGE ~English~
          ~%MOD_FOLDER%/tra/english/setup.tra~
 
 BEGIN ~The Artisan's Corner—High Level Abilities~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~EEEX/EEEX.TP2~ ~0~) ~This component requires EEEx.~ //EEX required!
 INCLUDE ~%MOD_FOLDER%/lib/hlas.tpa~
 INCLUDE ~%MOD_FOLDER%/lib/hla_tables.tpa~
