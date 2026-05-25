@@ -1,0 +1,438 @@
+COPY ~%MOD_FOLDER%/bmp~ ~override~
+COPY ~%MOD_FOLDER%/spells/armor_skin~ ~override~
+COPY ~%MOD_FOLDER%/spells/epic_marksman~ ~override~
+COPY ~%MOD_FOLDER%/spells/epic_prowess~ ~override~
+COPY ~%MOD_FOLDER%/spells/epic_toughness~ ~override~
+COPY ~%MOD_FOLDER%/spells/blinding_speed~ ~override~
+COPY ~%MOD_FOLDER%/spells/whirlwind_attack~ ~override~
+COPY ~%MOD_FOLDER%/spells/critical_strike~ ~override~
+COPY ~%MOD_FOLDER%/spells/sundering_strike~ ~override~
+COPY ~%MOD_FOLDER%/spells/hardiness~ ~override~
+COPY ~%MOD_FOLDER%/spells/improved_critical~ ~override~
+COPY ~%MOD_FOLDER%/spells/one_shot~ ~override~
+COPY ~%MOD_FOLDER%/spells/last_stand~ ~override~
+COPY ~%MOD_FOLDER%/spells/saving_throws~ ~override~
+COPY ~%MOD_FOLDER%/spells/epic_weapon_focus~ ~override~
+COPY ~%MOD_FOLDER%/eeex/double_hit~ ~override~
+
+COPY_EXISTING ~#0HLA_1.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Prowess~
+SAY UNIDENTIFIED_DESC ~Epic Prowess
+The character's skill at combat grows, permanently granting them a +1 bonus to hit and damage.
+
+This ability may be selected once.~
+
+COPY_EXISTING ~#0HLA_2.SPL~ ~OVERRIDE~
+SAY NAME1 ~Armor Skin~
+SAY UNIDENTIFIED_DESC ~Armor Skin
+The character's armor class vs. all weapon types permanently increases by 1.
+
+This ability may be selected once.~
+
+COPY_EXISTING ~#0HLA_3.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Marksman~
+SAY UNIDENTIFIED_DESC ~Epic Marksman
+The character permanently gains a +1 damage bonus on ranged attacks. Depending on the character's Dexterity, they gain a further +1 bonus at 19, 22 and 25 Dexterity respectively.
+
+This ability may be selected once.
+
+Requires: Epic Prowess, Proficiency in Crossbow, Longbow, Shortbow, Dart or Sling~
+
+COPY_EXISTING ~#0HLA3X.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 326 parameter2 = prof_gteq_103 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 326 match_parameter2 = prof_gteq_103 parameter2 = prof_gteq_104 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 326 match_parameter2 = prof_gteq_103 parameter2 = prof_gteq_105 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 326 match_parameter2 = prof_gteq_103 parameter2 = prof_gteq_106 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 326 match_parameter2 = prof_gteq_103 parameter2 = prof_gteq_107 END
+
+ACTION_FOR_EACH base_clab IN clabba01 clabdr01 clabfi01 clabmo01 clabpa01 clabpr01 clabrn01 clabth01 clabma01 clabso01 BEGIN
+ACTION_IF FILE_EXISTS_IN_GAME ~%base_clab%.2DA~ BEGIN
+COPY_EXISTING ~%base_clab%.2DA~ OVERRIDE
+  // Borrowed from Rogue Rebalancing
+  REPLACE_TEXTUALLY ~AP_#0HLA3X~ ~****      ~
+        LPF set_clab_2da_entries INT_VAR f_MinLevel = 1 f_Increment = 1 STR_VAR f_Entry = AP_#0HLA3X END
+  PRETTY_PRINT_2DA
+END
+END
+
+COPY_EXISTING ~KITLIST.2DA~ ~override~
+  READ_2DA_ENTRIES_NOW ~KITLIST~ 10
+  FOR (row = 1; row < KITLIST; row += 1) BEGIN
+  READ_2DA_ENTRY_FORMER ~KITLIST~ row 5 kit_clab
+  READ_2DA_ENTRY_FORMER ~KITLIST~ row 1 kit_label
+  READ_2DA_ENTRY_FORMER ~KITLIST~ row 8 kit_class
+  
+    PATCH_IF FILE_EXISTS_IN_GAME ~%kit_clab%.2da~ BEGIN
+      INNER_ACTION BEGIN
+      COPY_EXISTING ~%kit_clab%.2DA~ override
+        REPLACE_TEXTUALLY ~AP_#0HLA3X~ ~****      ~
+        LPF set_clab_2da_entries INT_VAR f_MinLevel = 1 f_Increment = 1 STR_VAR f_Entry = AP_#0HLA3X END
+        PRETTY_PRINT_2DA
+      END
+  END
+END
+
+COPY_EXISTING ~#0HLA_4.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Toughness~
+SAY UNIDENTIFIED_DESC ~Epic Toughness
+The character permanently gains an additional +15 Maximum Hit Points.
+
+This ability may be selected up to ten times.~
+
+COPY_EXISTING ~#0HLA_5.SPL~ ~OVERRIDE~
+SAY NAME1 ~Improved Critical~
+SAY UNIDENTIFIED_DESC ~Improved Critical
+The character permanently gains a +1 bonus to their critical threat range.
+
+This ability may be selected once.~
+
+COPY_EXISTING ~#0HLA_6.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Reflexes~
+SAY UNIDENTIFIED_DESC ~Lightning Reflexes
+The character permanently gains a +1 bonus to Saving Throws vs. Breath and Polymorph.
+
+This ability may be selected up to three times.~
+
+COPY_EXISTING ~#0HLA_7.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Fortitude~
+SAY UNIDENTIFIED_DESC ~Great Fortitude
+The character permanently gains a +1 bonus to Saving Throws vs. Death.
+
+This ability may be selected up to three times.~
+
+COPY_EXISTING ~#0HLA_8.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Will~
+SAY UNIDENTIFIED_DESC ~Epic Will
+The character permanently gains a +1 bonus to Saving Throws vs. Spells and Wands.
+
+This ability may be selected up to three times.~
+
+ACTION_IF FILE_EXISTS_IN_GAME ~C0PR#CL.SPL~ THEN BEGIN
+
+COPY_EXISTING ~#0HLA_A.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Weapon Focus I~
+SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+
+This ability may be selected up to three times, but may only be used once per weapon type.~
+
+COPY_EXISTING ~#0HLA_B.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Weapon Focus II~
+SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+
+This ability may be selected up to three times, but may only be used once per weapon type.~
+
+COPY_EXISTING ~#0HLA_C.SPL~ ~OVERRIDE~
+SAY NAME1 ~Epic Weapon Focus III~
+SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+
+This ability may be selected up to three times, but may only be used once per weapon type.~
+
+ACTION_FOR_EACH epic_weapon_focus IN A B C BEGIN
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%A.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW1H01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_89 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Bastard Sword~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%B.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW1H04 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_90 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Long Sword~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65626 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DB~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%C.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW1H07 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_91 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Short Sword~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65627 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DC~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%D.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IAX1H01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_92 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Axe~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65628 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DD~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%E.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW2H01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_93 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Two-Handed Sword~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65629 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DE~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%F.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW1H43 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_94 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Katana~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65630 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DF~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%G.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISW1H20 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_95 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Scimitar~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65631 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DG~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%H.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IDAGG01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_96 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Dagger~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65632 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DH~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%I.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IHAMM01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_97 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: War Hammer~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65633 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DI~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%J.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IBLUN01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_115 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Club~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65651 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DJ~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%K.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISPER01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_98 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Spear~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65634 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DK~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%L.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IHALB01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_99 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Halberd~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65635 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DL~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%M.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IBLUN02 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_100 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Flail~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65636 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DM~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%N.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IBLUN04 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_101 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Mace~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65637 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DN~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%O.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISTAF01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_102 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Quarterstaff~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65638 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DO~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%P.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IXBOW01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_103 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Crossbow~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65639 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DP~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%Q.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IBOW03 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_104 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Longbow~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65640 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DQ~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%R.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IBOW05 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_105 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Shortbow~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65641 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DR~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%S.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = IDART01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_106 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Dart~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65642 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DS~ END
+
+COPY_EXISTING ~#0HLA_AA.SPL~ ~OVERRIDE/#0HLA_%epic_weapon_focus%T.SPL~
+LPF ALTER_SPELL_HEADER STR_VAR icon = ISLNG01 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 318 match_parameter1 = 5 parameter2 = prof_gteq_107 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Epic Weapon Focus: Sling~) END
+LPF ALTER_EFFECT INT_VAR match_opcode = 233 parameter2 = 65643 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT INT_VAR match_opcode = 172 STR_VAR resource = EVAL ~#0HLA_%epic_weapon_focus%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = EVAL ~#0HLA_DA~ resource = EVAL ~#0HLA_DT~ END
+
+END
+
+ACTION_FOR_EACH epic_weapon_type IN A B C D E F G H I J K L M N O P Q R S T BEGIN
+
+COPY_EXISTING ~#0HLA_DA.SPL~ ~OVERRIDE/#0HLA_D%epic_weapon_type%.SPL~
+LPF ALTER_EFFECT STR_VAR match_resource = ~#0HLA_AA~ resource = EVAL ~#0HLA_A%epic_weapon_type%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = ~#0HLA_BA~ resource = EVAL ~#0HLA_B%epic_weapon_type%~ END
+LPF ALTER_EFFECT STR_VAR match_resource = ~#0HLA_CA~ resource = EVAL ~#0HLA_C%epic_weapon_type%~ END
+
+END
+
+END
+
+COPY_EXISTING ~#0CL900.SPL~ ~OVERRIDE~
+SAY NAME1 ~Blinding Speed~
+SAY UNIDENTIFIED_DESC ~Blinding Speed
+This ability allows the user to move and attack at extraordiary speed. For the next two turns, the user's movement rate is quadrupled, and their attacks per rounds are doubled as per an Improved Haste spell. As this effect is not truly magical in nature, it may not be dispelled as Improved Haste might.
+
+This ability may be selected once. Upon selecting this ability, it may be used twice per day.~
+
+COPY_EXISTING ~SPCL900.SPL~ ~OVERRIDE~
+SAY NAME1 ~Blinding Speed~
+SAY UNIDENTIFIED_DESC ~Blinding Speed
+This ability allows the user to move and attack at extraordiary speed. For the next two turns, the user's movement rate is quadrupled, and their attacks per rounds are doubled as per an Improved Haste spell. As this effect is not truly magical in nature, it may not be dispelled as Improved Haste might.
+
+This ability may be selected once. Upon selecting this ability, it may be used twice per day.~
+
+COPY_EXISTING ~SPCL901.SPL~ ~OVERRIDE~
+SAY NAME1 ~Whirlwind Attack~
+SAY UNIDENTIFIED_DESC ~Whirlwind Attack
+This ability allows the warrior to unleash a flurry of super-fast blows. For the duration, the user's THAC0 is penalized by 4 points and they may not make critical hits, but are Hasted for the duration and each attack made will roll to hit twice. The additional attack deals 50% reduced physical damage.
+
+The Whirlwind Attack lasts for one round.
+
+Requires: Blinding Speed~
+
+COPY_EXISTING ~SPCL905.SPL~ ~OVERRIDE~
+SAY NAME1 ~Critical Strike~
+SAY UNIDENTIFIED_DESC ~Critical Strike
+Upon using this ability, the warrior unleashes a chain of increasingly lethal strikes. For the next three successful melee attacks after landing this ability, the warrior immediately attacks again with an additional hit that will always critically strike. The second and third additional attacks deal 25% and 50% increased physical damage respectively, and the final attack always deals maximum damage.
+
+Requires: Improved Critical~
+
+COPY_EXISTING ~#0CL905A.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 330 parameter1 = RESOLVE_STR_REF (~Critical Strike—First Strike~) END
+COPY_EXISTING ~#0CL905D.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 330 parameter1 = RESOLVE_STR_REF (~Critical Strike—Second Strike~) END
+COPY_EXISTING ~#0CL905G.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 330 parameter1 = RESOLVE_STR_REF (~Critical Strike—Final Strike~) END
+
+COPY_EXISTING ~SPCL906.SPL~ ~OVERRIDE~
+SAY NAME1 ~Sundering Strike~
+SAY UNIDENTIFIED_DESC ~Sundering Strike
+This powerful two-strike technique allows warriors of great strength to break their opponent's guard and then inflict a debilitating attack. After this ability is used, the first melee attack made by the user Slows the target, reducing their Armor Class and THAC0 by 4, and reduces their physical resistances by a value equal to the user's Strength stat multiplied by 2 for three rounds. The second attack made afterwards has an increased melee damage modifier of 10 and Stuns the target for two rounds unless a Saving Throw vs. Death at -2 is made, with an additional -1 modifier per point of Strength above 18.
+
+When Sundering Strike is used, the warrior may only make a maximum of two attacks per round until both attacks are made.~
+
+COPY_EXISTING ~#0CL906.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Slowed~) END
+
+COPY_EXISTING ~#0CL906C.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 326 match_parameter2 = 124 parameter2 = C0HTSTR END
+
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 139 parameter1 = RESOLVE_STR_REF (~Stunned~) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906E.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 3) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906F.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 4) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906G.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 5) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906H.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 6) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906I.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 7) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906J.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 8) END
+COPY_EXISTING ~#0CL906D.SPL~ ~OVERRIDE/#0CL906K.SPL~
+LPF ALTER_EFFECT_EX INT_VAR savebonus = (0 - 9) END
+
+COPY_EXISTING ~#0CL907.SPL~ ~OVERRIDE~
+SAY NAME1 ~Hardiness~
+SAY UNIDENTIFIED_DESC ~Hardiness
+Upon selecting this ability for the first time, the warrior permanently gains 10% resistance to all forms of physical damage.
+
+When used as a special ability, the warrior calls upon hidden reserves of strength during times of danger, gaining 10% resistance to all physical damage plus 1% additional resistance for every 10 Maximum Hit Points they have at the time of casting, up to a maximum of 40% total at 300 Maximum Hit Points. The ability lasts for 1 round for every 2 levels of the warrior.
+
+This ability does not stack with Defensive Stance.
+
+Requires: Epic Toughness~
+
+COPY_EXISTING ~SPCL907.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 326 parameter2 = C0_MAX_HP_GT STR_VAR match_resource = ~#0CL907B~ END
+SAY NAME1 ~Hardiness~
+SAY UNIDENTIFIED_DESC ~Hardiness
+Upon selecting this ability for the first time, the warrior permanently gains 10% resistance to all forms of physical damage.
+
+When used as a special ability, the warrior calls upon hidden reserves of strength during times of danger, gaining 10% resistance to all physical damage plus 1% additional resistance for every 10 Maximum Hit Points they have at the time of casting, up to a maximum of 40% total at 300 Maximum Hit Points. The ability lasts for 1 round for every 2 levels of the warrior.
+
+This ability does not stack with Defensive Stance.
+
+Requires: Epic Toughness~
+
+COPY_EXISTING ~SPCL907.SPL~ ~OVERRIDE/SPWISH12.SPL~
+
+COPY_EXISTING ~#0CL908.SPL~ ~OVERRIDE~
+SAY NAME1 ~One Shot~
+SAY UNIDENTIFIED_DESC ~One Shot
+The user can attempt to deliver an extremely powerful ranged attack at the cost of any additional attacks made for the next round. This attack is a guaranteed critical hit and inflicts additional non-mitigated missile damage equal to double the user's level.
+
+This ability may only be used once per turn.
+
+Requires: Epic Marksman~
+COPY_EXISTING ~#0CL908_.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 330 parameter1 = RESOLVE_STR_REF (~One Shot Ready~) END
+
+COPY_EXISTING ~#0CL908A.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 326 parameter2 = MSSL2 STR_VAR match_resource = ~#0CL908B~ END
+COPY_EXISTING ~#0CL908F.SPL~ ~OVERRIDE~
+LPF ALTER_EFFECT INT_VAR match_opcode = 330 parameter1 = RESOLVE_STR_REF (~One Shot Not Ready~) END
+
+COPY_EXISTING ~#0CL909.SPL~ ~OVERRIDE~
+SAY NAME1 ~Last Stand~
+SAY UNIDENTIFIED_DESC ~Last Stand
+The user gains a +150 temporary bonus to their maximum hit points for the next turn and immunity to all movement-impairing and mind-affecting effects. However, they may not receive healing from most sources while under the effects. When the duration ends, they lose the temporary hit points and take 150 points of non-lethal damage, knocking them unconscious if they would fall below one hit point.
+
+Requires: Epic Toughness, Hardiness~

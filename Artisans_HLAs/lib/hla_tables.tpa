@@ -1,0 +1,138 @@
+/*
+ACTION_CLEAR_ARRAY weapprof_cols
+ACTION_DEFINE_ASSOCIATIVE_ARRAY	weapprof_cols	BEGIN
+	4 => 4     // ~MAGE~
+	5 => 5     // ~FIGHTER~
+	6 => 6     // ~CLERIC~
+    7 => 7     // ~THIEF~
+    8 => 8     // ~BARD~
+    9 => 9     // ~PALADIN~
+    10 => 10   // ~DRUID~
+    11 => 11   // ~RANGER~
+    12 => 12   // ~FIGHTER_MAGE~
+    13 => 13   // ~FIGHTER_CLERIC~
+    14 => 14   // ~FIGHTER_THIEF~
+    15 => 15   // ~FIGHTER_MAGE_THIEF~ 
+    16 => 16   // ~MAGE_THIEF~
+    17 => 17   // ~CLERIC_MAGE~
+    18 => 18   // ~CLERIC_THIEF~
+    19 => 19   // ~FIGHTER_DRUID~
+    20 => 20   // ~FIGHTER_MAGE_CLERIC~
+    21 => 21   // ~CLERIC_RANGER~
+    51 => 51   // ~MONK~
+    60 => 60   // ~SHAMAN~
+END
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_ROWS 9 rows
+  FOR (row = 0 ; row < rows ; ++row) BEGIN
+    READ_2DA_ENTRY row 8 9 class
+    PATCH_IF ((IS_AN_INT class)) BEGIN
+      READ_2DA_ENTRY row 1 9 kitname
+      DEFINE_ASSOCIATIVE_ARRAY weapprof_cols_kitname BEGIN ~%kitname%~ => ~%kitname%~ END
+    END
+  END
+  BUT_ONLY   
+      
+COPY_EXISTING ~weapprof.2da~  ~override~
+  COUNT_2DA_COLS col_count
+  SET col_check = col_count - 1
+  COUNT_2DA_COLS col_count
+  PATCH_PHP_EACH weapprof_cols_kitname AS match_name => foo BEGIN
+    FOR (column = 0; column < col_check; ++column) BEGIN
+      READ_2DA_ENTRY 0 column col_check name
+      PATCH_IF ("%name%" STRING_COMPARE_CASE "%match_name%" = 0) BEGIN
+        SET column += 1 // row with names has an empty entry for the first column
+        DEFINE_ASSOCIATIVE_ARRAY weapprof_cols BEGIN ~%column%~ => ~%column%~ END
+        SET column = col_count // kill loop
+      END
+    END
+  END
+  PATCH_PHP_EACH weapprof_cols AS column => foo BEGIN
+    FOR (row = 8; row < 32; ++row) BEGIN
+      READ_2DA_ENTRY 23 column col_count stars_crossbow
+      READ_2DA_ENTRY 24 column col_count stars_longbow
+      READ_2DA_ENTRY 25 column col_count stars_shortbow
+      READ_2DA_ENTRY 26 column col_count stars_darts
+      READ_2DA_ENTRY 27 column col_count stars_sling
+      PATCH_IF (stars_crossbow > 1) OR (stars_crossbow > 1) OR (stars_crossbow > 1) OR (stars_darts > 1) OR (stars_sling > 1) BEGIN
+        SET ranged_hlas = 1
+      END
+
+    END
+  END
+  PRETTY_PRINT_2DA
+  BUT_ONLY
+  */
+/*
+ACTION_DEFINE_ASSOCIATIVE_ARRAY	WEAPPROF_WEAPONTYPE	BEGIN
+	~CROSSBOW~	                =>	23
+	~LONGBOW~	                  =>	24
+	~SHORTBOW~	                =>	25
+	~DART~	                    =>	26
+	~SLING~	                    =>	27
+END
+ACTION_PHP_EACH WEAPPROF_WEAPONTYPE AS weapon => weapon_number BEGIN
+COPY_EXISTING ~weapprof.2da~  ~override~
+  COUNT_2DA_COLS col_count
+    READ_2DA_ENTRY ~%weapon_number%~ 4 col_count ranged_prof
+
+    INNER_ACTION BEGIN
+        PRINT ~%ranged_prof%~
+    END
+      
+END*/
+
+ACTION_CLEAR_ARRAY class_id
+ACTION_DEFINE_ASSOCIATIVE_ARRAY	class_id BEGIN
+	1 => 1     // ~MAGE~
+	2 => 2     // ~FIGHTER~
+	3 => 3     // ~CLERIC~
+    4 => 4     // ~THIEF~
+    5 => 5     // ~BARD~
+    6 => 6     // ~PALADIN~
+    7 => 7   // ~FIGHTER_MAGE~
+    8 => 8   // ~FIGHTER_CLERIC~
+    9 => 9   // ~FIGHTER_THIEF~
+    10 => 10   // ~FIGHTER_MAGE_THIEF~ 
+    11 => 11   // ~DRUID~
+    12 => 12   // ~RANGER~
+    13 => 13   // ~MAGE_THIEF~
+    14 => 14   // ~CLERIC_MAGE~
+    15 => 15   // ~CLERIC_THIEF~
+    16 => 16   // ~FIGHTER_DRUID~
+    17 => 17   // ~FIGHTER_MAGE_CLERIC~
+    18 => 18   // ~CLERIC_RANGER~
+    19 => 19   // ~SORCERER~
+    20 => 20   // ~MONK~
+    21 => 21   // ~SHAMAN~
+END
+ACTION_PHP_EACH class_id AS class => class_number BEGIN
+
+LAF DESTRUCTO_REMOVE_HLA INT_VAR class = class_number STR_VAR remove_ability = GA_SPCL902 END
+LAF DESTRUCTO_REMOVE_HLA INT_VAR class = class_number STR_VAR remove_ability = GA_SPCL903 END
+LAF DESTRUCTO_REMOVE_HLA INT_VAR class = class_number STR_VAR remove_ability = GA_SPCL904 END
+
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_1~ ability = ~AP_#0HLA_1~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_2~ ability = ~AP_#0HLA_2~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_3~ ability = ~AP_#0HLA_3~ num_allowed = 1 prerequisite = ~AP_#0HLA_1~ excluded_by = ~AP_#0HLA_3X~ END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_4~ ability = ~AP_#0HLA_4~ num_allowed = 10 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_5~ ability = ~AP_#0HLA_5~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_6~ ability = ~AP_#0HLA_6~ num_allowed = 3 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_7~ ability = ~AP_#0HLA_7~ num_allowed = 3 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_8~ ability = ~AP_#0HLA_8~ num_allowed = 3 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_A~ ability = ~GA_#0HLA_A~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_B~ ability = ~GA_#0HLA_B~ num_allowed = 1 prerequisite = ~GA_#0HLA_A~ END
+LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_C~ ability = ~GA_#0HLA_C~ num_allowed = 1 prerequisite = ~GA_#0HLA_B~ END
+
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL900~ ability = ~AP_#0CL900~ remove_ability = ~GA_SPCL900~ num_allowed = 1 END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~SPCL901~ ability = ~GA_SPCL901~ remove_ability = ~GA_SPCL901~ num_allowed = 16 prerequisite = ~AP_#0CL900~ END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~SPCL905~ ability = ~GA_SPCL905~ remove_ability = ~GA_SPCL905~ num_allowed = 16 prerequisite = ~AP_#0HLA_5~ END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~SPCL906~ ability = ~GA_SPCL906~ remove_ability = ~GA_SPCL906~ num_allowed = 16 END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL908~ ability = ~GA_#0CL908~ remove_ability = ~GA_SPCL908~ num_allowed = 1 prerequisite = ~AP_#0HLA_3~ END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL907~ ability = ~AP_#0CL907~ remove_ability = ~GA_SPCL907~ num_allowed = 16 prerequisite = ~AP_#0HLA_4~ END
+LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL909~ ability = ~GA_#0CL909~ remove_ability = ~GA_SPCL909~ num_allowed = 1 prerequisite = ~AP_#0CL907~ END
+
+END
+
+LAF DESTRUCTO_REMOVE_HLA INT_VAR class = 20 STR_VAR remove_ability = ~GA_#0CL908~ END
