@@ -121,9 +121,14 @@ LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_5~ abil
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_6~ ability = ~AP_#0HLA_6~ num_allowed = 3 END
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_7~ ability = ~AP_#0HLA_7~ num_allowed = 3 END
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_8~ ability = ~AP_#0HLA_8~ num_allowed = 3 END
+
+ACTION_IF FILE_EXISTS_IN_GAME ~C0PR#CL.SPL~ THEN BEGIN
+
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_A~ ability = ~GA_#0HLA_A~ num_allowed = 1 END
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_B~ ability = ~GA_#0HLA_B~ num_allowed = 1 prerequisite = ~GA_#0HLA_A~ END
 LAF SIMPLE_ADD_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0HLA_C~ ability = ~GA_#0HLA_C~ num_allowed = 1 prerequisite = ~GA_#0HLA_B~ END
+
+END
 
 LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL900~ ability = ~AP_#0CL900~ remove_ability = ~GA_SPCL900~ num_allowed = 1 END
 LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~SPCL901~ ability = ~GA_SPCL901~ remove_ability = ~GA_SPCL901~ num_allowed = 16 prerequisite = ~AP_#0CL900~ END
