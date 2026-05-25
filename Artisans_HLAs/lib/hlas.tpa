@@ -112,21 +112,21 @@ ACTION_IF FILE_EXISTS_IN_GAME ~C0PR#CL.SPL~ THEN BEGIN
 COPY_EXISTING ~#0HLA_A.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus I~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
 COPY_EXISTING ~#0HLA_B.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus II~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
 COPY_EXISTING ~#0HLA_C.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus III~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
