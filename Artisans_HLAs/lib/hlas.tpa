@@ -88,14 +88,14 @@ This ability may be selected once.~
 
 COPY_EXISTING ~#0HLA_6.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Reflexes~
-SAY UNIDENTIFIED_DESC ~Lightning Reflexes
+SAY UNIDENTIFIED_DESC ~Epic Reflexes
 The character permanently gains a +1 bonus to Saving Throws vs. Breath and Polymorph.
 
 This ability may be selected up to three times.~
 
 COPY_EXISTING ~#0HLA_7.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Fortitude~
-SAY UNIDENTIFIED_DESC ~Great Fortitude
+SAY UNIDENTIFIED_DESC ~Epic Fortitude
 The character permanently gains a +1 bonus to Saving Throws vs. Death.
 
 This ability may be selected up to three times.~
