@@ -22,7 +22,7 @@ The character permanently gains a +1 bonus to Saving Throws vs. Death. This abil
 ## Epic Will
 The character permanently gains a +1 bonus to Saving Throws vs. Spells and Wands. This ability may be selected up to three times.
 ## Epic Weapon Focus (requires EEex proficiency system applied to Artisan's Kitpack)
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon. This ability may be selected up to three times, but may only be used once per weapon type.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon. This ability may be selected up to three times, but may only be used once per weapon type.
 
 # Warrior HLAs
 *These HLAs are available for warrior classes including fighters, rangers and paladins. Some may be available for specific kits.*
