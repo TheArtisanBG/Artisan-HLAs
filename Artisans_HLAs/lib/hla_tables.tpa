@@ -85,27 +85,27 @@ END*/
 
 ACTION_CLEAR_ARRAY class_id
 ACTION_DEFINE_ASSOCIATIVE_ARRAY	class_id BEGIN
-	1 => 1     // ~MAGE~
-	2 => 2     // ~FIGHTER~
-	3 => 3     // ~CLERIC~
-    4 => 4     // ~THIEF~
-    5 => 5     // ~BARD~
-    6 => 6     // ~PALADIN~
-    7 => 7   // ~FIGHTER_MAGE~
-    8 => 8   // ~FIGHTER_CLERIC~
-    9 => 9   // ~FIGHTER_THIEF~
-    10 => 10   // ~FIGHTER_MAGE_THIEF~ 
-    11 => 11   // ~DRUID~
-    12 => 12   // ~RANGER~
-    13 => 13   // ~MAGE_THIEF~
-    14 => 14   // ~CLERIC_MAGE~
-    15 => 15   // ~CLERIC_THIEF~
-    16 => 16   // ~FIGHTER_DRUID~
-    17 => 17   // ~FIGHTER_MAGE_CLERIC~
-    18 => 18   // ~CLERIC_RANGER~
-    19 => 19   // ~SORCERER~
-    20 => 20   // ~MONK~
-    21 => 21   // ~SHAMAN~
+	  ~MAGE~ => 1     // ~MAGE~
+	  ~FIGHTER~ => 2     // ~FIGHTER~
+	  ~CLERIC~ => 3     // ~CLERIC~
+    ~THIEF~ => 4     // ~THIEF~
+    ~BARD~ => 5     // ~BARD~
+    ~PALADIN~ => 6     // ~PALADIN~
+    ~FIGHTER_MAGE~ => 7   // ~FIGHTER_MAGE~
+    ~FIGHTER_CLERIC~ => 8   // ~FIGHTER_CLERIC~
+    ~FIGHTER_THIEF~ => 9   // ~FIGHTER_THIEF~
+    ~FIGHTER_MAGE_THIEF~ => 10   // ~FIGHTER_MAGE_THIEF~ 
+    ~DRUID~ => 11   // ~DRUID~
+    ~RANGER~ => 12   // ~RANGER~
+    ~MAGE_THIEF~ => 13   // ~MAGE_THIEF~
+    ~CLERIC_MAGE~ => 14   // ~CLERIC_MAGE~
+    ~CLERIC_THIEF~ => 15   // ~CLERIC_THIEF~
+    ~FIGHTER_DRUID~ => 16   // ~FIGHTER_DRUID~
+    ~FIGHTER_MAGE_CLERIC~ => 17   // ~FIGHTER_MAGE_CLERIC~
+    ~CLERIC_RANGER~ => 18   // ~CLERIC_RANGER~
+    ~SORCERER~ => 19   // ~SORCERER~
+    ~MONK~ => 20   // ~MONK~
+    ~SHAMAN~ => 21   // ~SHAMAN~
 END
 ACTION_PHP_EACH class_id AS class => class_number BEGIN
 
@@ -140,4 +140,43 @@ LAF SIMPLE_REPLACE_HLA INT_VAR class = class_number STR_VAR 2da_row = ~#0CL909~ 
 
 END
 
-LAF DESTRUCTO_REMOVE_HLA INT_VAR class = 20 STR_VAR remove_ability = ~GA_#0CL908~ END
+ACTION_IF NOT MOD_IS_INSTALLED ~BardicWonders/Setup-BardicWonders.tp2~ ~2003~ THEN BEGIN
+
+LAF SIMPLE_ADD_HLA INT_VAR class = 5 STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+
+END
+
+OUTER_SET MAGE = 1     // ~MAGE~
+OUTER_SET FIGHTER = 2     // ~FIGHTER~
+OUTER_SET CLERIC = 3     // ~CLERIC~
+OUTER_SET THIEF = 4     // ~THIEF~
+OUTER_SET BARD = 5     // ~BARD~
+OUTER_SET PALADIN = 6     // ~PALADIN~
+OUTER_SET FIGHTER_MAGE = 7   // ~FIGHTER_MAGE~
+OUTER_SET FIGHTER_CLERIC = 8   // ~FIGHTER_CLERIC~
+OUTER_SET FIGHTER_THIEF = 9   // ~FIGHTER_THIEF~
+OUTER_SET FIGHTER_MAGE_THIEF = 10   // ~FIGHTER_MAGE_THIEF~ 
+OUTER_SET DRUID = 11   // ~DRUID~
+OUTER_SET RANGER = 12   // ~RANGER~
+OUTER_SET MAGE_THIEF = 13   // ~MAGE_THIEF~
+OUTER_SET CLERIC_MAGE = 14   // ~CLERIC_MAGE~
+OUTER_SET CLERIC_THIEF = 15   // ~CLERIC_THIEF~
+OUTER_SET FIGHTER_DRUID = 16   // ~FIGHTER_DRUID~
+OUTER_SET FIGHTER_MAGE_CLERIC = 17   // ~FIGHTER_MAGE_CLERIC~
+OUTER_SET CLERIC_RANGER = 18   // ~CLERIC_RANGER~
+OUTER_SET SORCERER = 19   // ~SORCERER~
+OUTER_SET MONK = 20   // ~MONK~
+OUTER_SET SHAMAN = 21   // ~SHAMAN~
+
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_CLERIC STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE_THIEF STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE_CLERIC STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = MAGE_THIEF STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = CLERIC_MAGE STR_VAR 2da_row = ~#0HLA_D~ ability = ~AP_#0HLA_D~ num_allowed = 1 END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE STR_VAR 2da_row = ~#0HLA_E~ ability = ~AP_#0HLA_E~ num_allowed = 1 prerequisite = ~AP_#0HLA_D~ END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_CLERIC STR_VAR 2da_row = ~#0HLA_E~ ability = ~AP_#0HLA_E~ num_allowed = 1 prerequisite = ~AP_#0HLA_D~ END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE_THIEF STR_VAR 2da_row = ~#0HLA_E~ ability = ~AP_#0HLA_E~ num_allowed = 1 prerequisite = ~AP_#0HLA_D~ END
+LAF SIMPLE_ADD_HLA INT_VAR class = FIGHTER_MAGE_CLERIC STR_VAR 2da_row = ~#0HLA_E~ ability = ~AP_#0HLA_E~ num_allowed = 1 prerequisite = ~AP_#0HLA_D~ END
+
+LAF DESTRUCTO_REMOVE_HLA INT_VAR class = MONK STR_VAR remove_ability = ~GA_#0CL908~ END

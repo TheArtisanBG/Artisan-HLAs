@@ -1,5 +1,6 @@
 COPY ~%MOD_FOLDER%/bmp~ ~override~
 COPY ~%MOD_FOLDER%/spells/armor_skin~ ~override~
+COPY ~%MOD_FOLDER%/spells/armored_caster~ ~override~
 COPY ~%MOD_FOLDER%/spells/epic_marksman~ ~override~
 COPY ~%MOD_FOLDER%/spells/epic_prowess~ ~override~
 COPY ~%MOD_FOLDER%/spells/epic_toughness~ ~override~
@@ -321,6 +322,60 @@ LPF ALTER_EFFECT STR_VAR match_resource = ~#0HLA_CA~ resource = EVAL ~#0HLA_C%ep
 END
 
 END
+
+COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~ //copies all item files
+  PATCH_IF (SOURCE_SIZE > 0x71) BEGIN // avoid crashing on empty items
+      READ_SHORT    0x1C type //reads the byte containing item type
+	  READ_SHORT    0x22 appearance //reads the byte containing item appearance
+      PATCH_IF (type = 2) AND (appearance = 16690) BEGIN // if it is leather armor
+		LPF ALTER_EFFECT
+			INT_VAR
+				match_opcode = 145
+				silent = 1
+				opcode = 177
+				target = 1
+				parameter1 = 0
+				parameter2 = 2
+				timing = 2
+				insert_point = (0 - 1)
+			STR_VAR
+				resource = C0ARCAS1
+		END
+      END
+      PATCH_IF (type = 2) AND (appearance = 16691) OR (appearance = 16692) BEGIN // if it is leather armor
+		LPF ALTER_EFFECT
+			INT_VAR
+				match_opcode = 145
+				silent = 1
+				opcode = 177
+				target = 1
+				parameter1 = 0
+				parameter2 = 2
+				timing = 2
+				insert_point = (0 - 1)
+			STR_VAR
+				resource = C0ARCAS2
+		END
+      END
+      END
+BUT_ONLY_IF_IT_CHANGES
+
+COPY_EXISTING ~#0HLA_D.SPL~ ~OVERRIDE~
+SAY NAME1 ~Armored Caster~
+SAY UNIDENTIFIED_DESC ~Armored Caster
+The character permanently gains the ability to cast arcane spells in armor up to studded leather.~
+
+COPY_EXISTING ~#0HLA_E.SPL~ ~OVERRIDE~
+SAY NAME1 ~Battle Caster~
+SAY UNIDENTIFIED_DESC ~Battle Caster
+The character permanently gains the ability to cast arcane spells in any armor.
+
+Requires: Armored Caster~
+
+COPY_EXISTING_REGEXP GLOB ~.*\.spl~ ~override~ //copies all item files
+  LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS1 resource = ~#0HLA_D~ END
+  LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS2 resource = ~#0HLA_E~ END
+  LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS2 resource = ~C0BWHL9~ END
 
 COPY_EXISTING ~#0CL900.SPL~ ~OVERRIDE~
 SAY NAME1 ~Blinding Speed~
