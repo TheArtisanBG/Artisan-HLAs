@@ -13,7 +13,6 @@ COPY ~%MOD_FOLDER%/spells/improved_critical~ ~override~
 COPY ~%MOD_FOLDER%/spells/one_shot~ ~override~
 COPY ~%MOD_FOLDER%/spells/last_stand~ ~override~
 COPY ~%MOD_FOLDER%/spells/saving_throws~ ~override~
-COPY ~%MOD_FOLDER%/spells/epic_weapon_focus~ ~override~
 COPY ~%MOD_FOLDER%/eeex/double_hit~ ~override~
 
 COPY_EXISTING ~#0HLA_1.SPL~ ~OVERRIDE~
@@ -109,25 +108,26 @@ The character permanently gains a +1 bonus to Saving Throws vs. Spells and Wands
 This ability may be selected up to three times.~
 
 ACTION_IF FILE_EXISTS_IN_GAME ~C0PR#CL.SPL~ THEN BEGIN
+COPY ~%MOD_FOLDER%/spells/epic_weapon_focus~ ~override~
 
 COPY_EXISTING ~#0HLA_A.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus I~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
 COPY_EXISTING ~#0HLA_B.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus II~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
 COPY_EXISTING ~#0HLA_C.SPL~ ~OVERRIDE~
 SAY NAME1 ~Epic Weapon Focus III~
 SAY UNIDENTIFIED_DESC ~Epic Weapon Focus
-The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally wield is chosen, they gain the ability to wield that weapon.
+The character may gain a proficiency point in any chosen weapon type. If a weapon that the character can not normally be wielded is chosen, they gain the ability to wield that weapon.
 
 This ability may be selected up to three times, but may only be used once per weapon type.~
 
@@ -376,6 +376,16 @@ COPY_EXISTING_REGEXP GLOB ~.*\.spl~ ~override~ //copies all item files
   LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS1 resource = ~#0HLA_D~ END
   LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS2 resource = ~#0HLA_E~ END
   LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 318 match_timing = 9 opcode = 313 STR_VAR match_resource = C0ARCAS2 resource = ~C0BWHL9~ END
+
+ACTION_IF FILE_EXISTS_IN_GAME ~#0HTD_S1.EFF~ THEN BEGIN
+COPY ~%MOD_FOLDER%/spells/shield_mastery~ ~override~
+
+COPY_EXISTING ~#0HLA_F.SPL~ ~OVERRIDE~
+SAY NAME1 ~Shield Mastery~
+SAY UNIDENTIFIED_DESC ~Shield Mastery
+The warrior's experience in carrying shields allows them to all but ignore their weight. Their Dexterity and melee THAC0 are no longer penalized while wielding large shields.~
+
+END
 
 COPY_EXISTING ~#0CL900.SPL~ ~OVERRIDE~
 SAY NAME1 ~Blinding Speed~
